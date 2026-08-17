@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --color-brand-primary: #3b82f6;
+  --color-brand-secondary: #6366f1;
+  --color-study-bg: #fdfcfb;
+  --color-study-dark-bg: #030712;
+
+  --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lush: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --shadow-deep: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+@layer base {
+  html {
+    @apply bg-[#fdfcfb] text-slate-950 transition-colors duration-300;
+  }
+  html:not(.dark) {
+    @apply bg-[#fdfcfb] text-slate-950;
+  }
+  html.dark {
+    @apply bg-[#030712] text-slate-100;
+  }
+
+  body {
+    @apply bg-[#fdfcfb] text-slate-950 antialiased transition-colors duration-300 font-sans min-h-screen;
+  }
+  body:not(.dark) {
+    @apply bg-[#fdfcfb] text-slate-950;
+  }
+  body.dark {
+    @apply bg-[#030712] text-slate-100;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight;
+  }
+}
+
+.glass-morphism {
+  @apply backdrop-blur-xl bg-white/70 border border-white/20 shadow-lush;
+}
+
+.dark .glass-morphism {
+  @apply bg-slate-950/70 border-slate-800/50;
+}
+
+.card-shine {
+  @apply relative overflow-hidden;
+}
+
+.card-shine::after {
+  content: "";
+  @apply absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 transition-opacity duration-500;
+}
+
+.card-shine:hover::after {
+  @apply opacity-100;
+}
+
+.markdown-body {
+  @apply space-y-4;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Luxury Black Notebook Page Paper Styling */
+.notebook-page-black {
+  background-color: #070b14;
+  background-image: 
+    linear-gradient(to right, rgba(239, 68, 68, 0.35) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 30px;
+  background-position: 52px 0, 0 0;
+  box-shadow: 
+    inset 0 0 100px rgba(0, 0, 0, 0.85),
+    0 25px 50px -12px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+/* Black Grid Notebook Page Styling */
+.notebook-grid-black {
+  background-color: #060911;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 26px 26px;
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+}
+
+/* Left Binder Ring holes for authentic notebook feel */
+.notebook-binder-holes::before {
+  content: "";
+  position: absolute;
+  top: 28px;
+  left: 18px;
+  bottom: 28px;
+  width: 14px;
+  background-image: radial-gradient(circle, #1e293b 40%, #030712 65%, transparent 70%);
+  background-size: 14px 40px;
+  background-repeat: repeat-y;
+  opacity: 0.9;
+  z-index: 10;
+  pointer-events: none;
+}
+

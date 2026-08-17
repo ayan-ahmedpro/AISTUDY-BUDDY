@@ -1,0 +1,102 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isSuperAdmin() {
+      return isSignedIn() && (
+        (request.auth.token != null && request.auth.token.email != null && (
+          request.auth.token.email.toLowerCase() == "ayaicrypcoin@gmail.com" ||
+          request.auth.token.email.toLowerCase() == "sagarmatha.store1@gmail.com"
+        )) ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        isSuperAdmin() ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // --- Admin Collection Rules ---
+    match /admins/{adminUid} {
+      allow read, write, get, list, create, update, delete: if true;
+    }
+
+    // --- User Rules ---
+    match /users/{userId} {
+      allow read, write, get, list, create, update, delete: if true;
+
+      // Subcollections
+      match /{allPaths=**} {
+        allow read, write, get, list, create, update, delete: if true;
+      }
+    }
+
+    // --- Payment Requests (JazzCash / EasyPaisa / Card Manual Verification) ---
+    match /payment_requests/{requestId} {
+      allow read, write, get, list, create, update, delete: if true;
+    }
+
+    match /{path=**}/payment_requests/{requestId} {
+      allow read, write, get, list, create, update, delete: if true;
+    }
+
+    // --- Collection Group Rules for Admin Queries ---
+    match /{path=**}/sessions/{sessionId} {
+      allow read, write, get, list, create, update, delete: if true;
+    }
+
+    match /{path=**}/notebooks/{notebookId} {
+      allow read, write, get, list, create, update, delete: if true;
+    }
+
+    // --- Public Progress Shares Rules ---
+    match /progress_shares/{shareId} {
+      allow read, write, get, list, create, update, delete: if true;
+    }
+
+    // --- Audit Logs Collection ---
+    match /audit_logs/{logId} {
+      allow read, write, get, list, create, update, delete: if true;
+    }
+
+    // --- Email Notifications Collection ---
+    match /email_notifications/{mailId} {
+      allow read, write, get, list, create, update, delete: if true;
+    }
+
+    // --- Resumes Collection ---
+    match /resumes/{userId} {
+      allow read, write, get, list, create, update, delete: if true;
+    }
+
+    // --- Test Connection Collection ---
+    match /test/{docId} {
+      allow read, write, get, list, create, update, delete: if true;
+    }
+
+    // --- Group Study Rooms (Real-time Collaboration) ---
+    match /group_study_rooms/{roomId} {
+      allow read, write, get, list, create, update, delete: if true;
+
+      match /{allPaths=**} {
+        allow read, write, get, list, create, update, delete: if true;
+      }
+    }
+
+    // Default match for all other paths
+    match /{document=**} {
+      allow read, write, get, list, create, update, delete: if true;
+    }
+  }
+}

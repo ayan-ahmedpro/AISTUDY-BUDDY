@@ -1,0 +1,132 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account information, streaks, analyses count and subscription status",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "totalStudyTime": { "type": "number" },
+        "lastActive": { "type": "string", "format": "date-time" },
+        "analysesUsed": { "type": "number" },
+        "bonusAnalyses": { "type": "number" },
+        "isPro": { "type": "boolean" },
+        "currentStreak": { "type": "number" },
+        "longestStreak": { "type": "number" },
+        "lastStudyDate": { "type": "string" },
+        "refCode": { "type": "string" },
+        "referredBy": { "type": "string" }
+      },
+      "required": ["uid", "email"]
+    },
+    "StudySession": {
+      "title": "Study Session",
+      "description": "A single analysis of study material",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "topic": { "type": "string" },
+        "subject": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "quizScore": { "type": "number" },
+        "totalQuestions": { "type": "number" },
+        "durationMinutes": { "type": "number" },
+        "masteryScore": { "type": "number" }
+      },
+      "required": ["userId", "topic", "timestamp"]
+    },
+    "ChatMessage": {
+      "title": "Chat Message",
+      "description": "Stored chat history",
+      "type": "object",
+      "properties": {
+        "role": { "type": "string", "enum": ["user", "assistant"] },
+        "text": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "sessionId": { "type": "string" }
+      },
+      "required": ["role", "text", "timestamp"]
+    },
+    "ProgressShare": {
+      "title": "Parent/Team Progress Share",
+      "description": "Read-only summary of study statistics shared with parents or team",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "displayName": { "type": "string" },
+        "currentStreak": { "type": "number" },
+        "longestStreak": { "type": "number" },
+        "totalAnalyses": { "type": "number" },
+        "quizzesCompleted": { "type": "number" },
+        "masteryScoreAverage": { "type": "number" },
+        "topicsStudied": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "sharedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "displayName", "sharedAt"]
+    },
+    "PaymentRequest": {
+      "title": "JazzCash / EasyPaisa Payment Request",
+      "description": "Manual payment submission requiring admin review and one-click Pro activation",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "displayName": { "type": "string" },
+        "paymentMethod": { "type": "string", "enum": ["JazzCash", "EasyPaisa", "Card"] },
+        "accountNumber": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderPhone": { "type": "string" },
+        "transactionId": { "type": "string" },
+        "receiptImage": { "type": "string" },
+        "plan": { "type": "string" },
+        "amount": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "userEmail", "paymentMethod", "senderName", "transactionId"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "users/{userId}/sessions/{sessionId}": {
+      "schema": "StudySession",
+      "description": "History of study sessions"
+    },
+    "users/{userId}/notebooks/{notebookId}": {
+      "schema": "Notebook",
+      "description": "Multi-source grounded notebooks"
+    },
+    "users/{userId}/chats": {
+      "schema": "ChatMessage",
+      "description": "Persistent chat history"
+    },
+    "users/{userId}/checkout_sessions/{sessionId}": {
+      "schema": "CheckoutSession",
+      "description": "Stripe/Safepay checkout sessions"
+    },
+    "users/{userId}/portal_sessions/{sessionId}": {
+      "schema": "PortalSession",
+      "description": "Stripe billing portal sessions"
+    },
+    "users/{userId}/subscriptions/{subscriptionId}": {
+      "schema": "Subscription",
+      "description": "User subscriptions managed by Stripe extension"
+    },
+    "progress_shares/{shareId}": {
+      "schema": "ProgressShare",
+      "description": "Publicly viewable parent and team progress statistics"
+    },
+    "payment_requests/{requestId}": {
+      "schema": "PaymentRequest",
+      "description": "JazzCash/EasyPaisa payment verification requests"
+    }
+  }
+}

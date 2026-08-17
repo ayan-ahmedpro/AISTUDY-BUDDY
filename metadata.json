@@ -1,0 +1,11 @@
+{
+  "name": "AI Study BUDDY Pro",
+  "description": "An elite AI-powered study ecosystem featuring adaptive summaries, 3D active-recall flashcards, pomodoro timers, real-time live voice tutoring, and psychological weakness detection for personalized learning growth.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
